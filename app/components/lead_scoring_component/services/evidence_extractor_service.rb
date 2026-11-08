@@ -10,7 +10,7 @@ module LeadScoringComponent
       DEFAULT_MODEL = "gpt-4.1-mini-2025-04-14"
       GEMINI_URL = URI("https://generativelanguage.googleapis.com/v1beta/openai/chat/completions")
       GEMINI_MODEL = "gemini-3.8-flash"
-      DEADLINE = 25
+      DEADLINE = 27
       PROMPT = <<~TEXT.freeze
         Extract evidence about an inbound lead for a B2B beverage wholesaler selling
         Coca-Cola, Monster, Red Bull and other wholesale beverages. Do not score or route.
@@ -104,7 +104,7 @@ module LeadScoringComponent
         http = Net::HTTP.new(@url.host, @url.port)
         http.use_ssl = true
         http.open_timeout = 3
-        http.read_timeout = 23
+        http.read_timeout = 25
         http.write_timeout = 3
         http.max_retries = 0
         http.request(request)
