@@ -63,7 +63,7 @@ RSpec.describe "Lead scoring HTTP API" do
     response = post_score(payload.to_json)
     expect(response.status).to eq(503)
     expect(JSON.parse(response.body)).to eq("error" => {
-      "code" => "configuration_missing", "message" => "Scoring provider is not configured."
+      "code" => "configuration_missing", "message" => "OpenAI API key is not configured."
     })
   end
 

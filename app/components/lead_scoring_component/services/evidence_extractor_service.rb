@@ -10,7 +10,7 @@ module LeadScoringComponent
       DEFAULT_MODEL = "gpt-4.1-mini-2025-04-14"
       GEMINI_URL = URI("https://generativelanguage.googleapis.com/v1beta/openai/chat/completions")
       GEMINI_MODEL = "gemini-3.8-flash"
-      DEADLINE = 20
+      DEADLINE = 25
       PROMPT = <<~TEXT.freeze
         Extract evidence about an inbound lead for a B2B beverage wholesaler selling
         Coca-Cola, Monster, Red Bull and other wholesale beverages. Do not score or route.
@@ -50,13 +50,18 @@ module LeadScoringComponent
 
       def call(conversation)
         if @api_key.to_s.strip.empty?
-          raise ScoringError.new("configuration_missing", "Scoring provider is not configured.", 503)
+          raise ScoringError.new("configuration_missing", "#{provider_name} API key is not configured.", 503)
         end
 
         response = Timeout.timeout(DEADLINE) { perform_request(conversation) }
         status = response.code.to_i
-        if status == 429 || status >= 500 || [401, 403].include?(status)
-          raise ScoringError.new("provider_unavailable", "Scoring provider is unavailable; retry later.", 503)
+        case status
+        when 401, 403
+          raise ScoringError.new("provider_authentication_failed", "#{provider_name} rejected the API key or access; check the provider credentials and permissions.", 503)
+        when 429
+          raise ScoringError.new("provider_rate_limited", "#{provider_name} rate limit or quota was reached; check the provider quota and retry later.", 503)
+        when 500..599
+          raise ScoringError.new("provider_unavailable", "#{provider_name} returned a service error; retry later.", 503)
         end
         LeadScoringComponent::Helpers::EvidenceHelper.invalid! unless status == 200
         body = JSON.parse(response.body)
@@ -66,14 +71,18 @@ module LeadScoringComponent
         LeadScoringComponent::Helpers::EvidenceHelper.invalid! if message["refusal"]
         LeadScoringComponent::Helpers::EvidenceHelper.validate!(JSON.parse(message.fetch("content")), conversation)
       rescue Timeout::Error
-        raise ScoringError.new("provider_timeout", "Scoring provider exceeded the time budget.", 504)
+        raise ScoringError.new("provider_timeout", "#{provider_name} did not respond within the time budget; retry later.", 504)
       rescue JSON::ParserError, KeyError, TypeError, NoMethodError
         LeadScoringComponent::Helpers::EvidenceHelper.invalid!
       rescue SocketError, SystemCallError, IOError, OpenSSL::SSL::SSLError
-        raise ScoringError.new("provider_unavailable", "Scoring provider is unavailable; retry later.", 503)
+        raise ScoringError.new("provider_unavailable", "Could not connect to #{provider_name}; retry later.", 503)
       end
 
       private
+
+      def provider_name
+        @provider == "gemini" ? "Gemini" : "OpenAI"
+      end
 
       def perform_request(conversation)
         request = Net::HTTP::Post.new(@url)
@@ -95,7 +104,7 @@ module LeadScoringComponent
         http = Net::HTTP.new(@url.host, @url.port)
         http.use_ssl = true
         http.open_timeout = 3
-        http.read_timeout = 15
+        http.read_timeout = 23
         http.write_timeout = 3
         http.max_retries = 0
         http.request(request)

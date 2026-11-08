@@ -34,6 +34,19 @@ RSpec.describe LeadScoringComponent::Services::EvidenceExtractorService do
     end
   end
 
+  { 401 => "provider_authentication_failed", 403 => "provider_authentication_failed",
+    429 => "provider_rate_limited", 503 => "provider_unavailable" }.each do |status, code|
+    it "identifies Gemini HTTP #{status} without exposing the response" do
+      stub_request(:post, described_class::GEMINI_URL.to_s).to_return(status: status, body: "sensitive provider details")
+      gemini = described_class.new(provider: "gemini", api_key: "test-key")
+      expect { gemini.call(payload["conversation"]) }.to raise_error(ScoringError) { |error|
+        expect([error.status, error.code]).to eq([503, code])
+        expect(error.message).to include("Gemini")
+        expect(error.message).not_to include("sensitive provider details")
+      }
+    end
+  end
+
   it "returns a timeout error rather than a fabricated score" do
     stub_request(:post, provider_url).to_timeout
     expect { client.call(payload["conversation"]) }.to raise_error(ScoringError) { |error|
