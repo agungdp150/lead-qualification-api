@@ -1,6 +1,6 @@
 # Directory structure
 
-Adapted from Luce Backend's `doc/contributing/directory-structure-and-naming.md`: domain components, purpose-based subdirectories, namespaced classes, service suffixes, a component documentation entry point, and matching RSpec folders.
+Domain components use purpose-based subdirectories, namespaced classes, and matching RSpec folders.
 
 ```text
 app/
@@ -71,7 +71,7 @@ Rails' normal Zeitwerk loading maps each component directory to its namespace. N
 
 ## Scope of the adaptation
 
-This service keeps the assessment's JSON HTTP contract. Its single interactor is a plain Ruby class exposing `.call`; it does not need Luce's application-specific BaseInteractor or GraphQL context. The stateless feature has no database, workers, or models.
+This service keeps the assessment's JSON HTTP contract. Its single interactor is a plain Ruby class exposing `.call`; it does not require a shared interactor framework or GraphQL context. The stateless feature has no database, workers, or models.
 
 RSpec specs mirror the implementation. Shared fixture and provider helpers live in `spec/support`. Provider responses remain explicit WebMock fixtures because API credentials were deferred; they are not presented as recorded live API traffic.
 
