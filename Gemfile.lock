@@ -151,7 +151,7 @@ DEPENDENCIES
   webmock (~> 3.25)
 
 RUBY VERSION
-   ruby 3.2.2p53
+   ruby 3.3.7p123
 
 BUNDLED WITH
    2.6.6
