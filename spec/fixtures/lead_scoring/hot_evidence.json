@@ -1,0 +1,47 @@
+{
+  "import_readiness": {
+    "value": "experienced",
+    "citations": [
+      {
+        "message_index": 0,
+        "quote": "8 years importing energy drinks"
+      }
+    ]
+  },
+  "product_fit": {
+    "value": "match",
+    "citations": [
+      {
+        "message_index": 0,
+        "quote": "Red Bull"
+      }
+    ]
+  },
+  "volume": {
+    "value": "container_monthly",
+    "citations": [
+      {
+        "message_index": 2,
+        "quote": "2-3 FCL/month sustained"
+      }
+    ]
+  },
+  "business": {
+    "value": "established",
+    "citations": [
+      {
+        "message_index": 2,
+        "quote": "250 retail accounts"
+      }
+    ]
+  },
+  "intent": {
+    "value": "wholesale",
+    "citations": [
+      {
+        "message_index": 0,
+        "quote": "UAE distributor"
+      }
+    ]
+  }
+}

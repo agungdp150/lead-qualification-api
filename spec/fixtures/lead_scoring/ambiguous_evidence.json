@@ -1,0 +1,47 @@
+{
+  "import_readiness": {
+    "value": "pending",
+    "citations": [
+      {
+        "message_index": 0,
+        "quote": "license in process"
+      }
+    ]
+  },
+  "product_fit": {
+    "value": "match",
+    "citations": [
+      {
+        "message_index": 0,
+        "quote": "Coca-Cola"
+      }
+    ]
+  },
+  "volume": {
+    "value": "container_monthly",
+    "citations": [
+      {
+        "message_index": 0,
+        "quote": "1 FCL/month"
+      }
+    ]
+  },
+  "business": {
+    "value": "new",
+    "citations": [
+      {
+        "message_index": 0,
+        "quote": "New entrant"
+      }
+    ]
+  },
+  "intent": {
+    "value": "wholesale",
+    "citations": [
+      {
+        "message_index": 0,
+        "quote": "Ghana-based distributor"
+      }
+    ]
+  }
+}

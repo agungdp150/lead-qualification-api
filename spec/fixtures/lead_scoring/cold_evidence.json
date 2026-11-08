@@ -1,0 +1,37 @@
+{
+  "import_readiness": {
+    "value": "unknown",
+    "citations": []
+  },
+  "product_fit": {
+    "value": "match",
+    "citations": [
+      {
+        "message_index": 0,
+        "quote": "red bull"
+      }
+    ]
+  },
+  "volume": {
+    "value": "personal",
+    "citations": [
+      {
+        "message_index": 0,
+        "quote": "a few cans"
+      }
+    ]
+  },
+  "business": {
+    "value": "unknown",
+    "citations": []
+  },
+  "intent": {
+    "value": "personal",
+    "citations": [
+      {
+        "message_index": 0,
+        "quote": "office party"
+      }
+    ]
+  }
+}
